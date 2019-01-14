@@ -29,14 +29,35 @@ class LessonController extends Controller
             $columnName = $request->input('columns.'.$columnId.'.data');
             $offset = $request->input('start');
             $limit = $request->input('length');
+            $title  = $request->input('title');
+            $datemin = $request->input('datemin');
+            $datemax = $request->input('datemax');
             $data = Lesson::offset($offset)
                 ->limit($limit)
+                ->where('lesson_name','like',"%$title%")
+                ->where(function ($m) use($datemin,$datemax){
+                    if($datemin != ''){
+                        $m->where('created_at','>=',$datemin);
+                    }
+                    if($datemax != ''){
+                        $m->where('created_at','<=',$datemax."23:59:59");
+                    }
+                })
                 ->with(['course'=>function($c){
                     $c->with('profession');
                 }])
                 ->orderBy($columnName,$orderWay)
                 ->get();
             $count = Lesson::count();
+            $recordscount = Lesson::where('lesson_name','like','%$title%')
+                ->where(function ($m) use($datemin,$datemax){
+                    if($datemax != ''){
+                        $m->where('created_at','<=',$datemin);
+                    }
+                    if($datemax != ''){
+                        $m->where('created_at','>=',$datemax);
+                    }
+                })->count();
             $info = [
                 'draw'=>$request->input('draw'),
                 'recordsTotal'=>$count,
