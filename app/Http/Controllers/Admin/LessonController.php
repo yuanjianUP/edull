@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Course;
 use App\Lesson;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class LessonController extends Controller
 {
@@ -66,5 +68,43 @@ class LessonController extends Controller
             ];
             return $info;
         }
+    }
+    public function add(Request $request){
+        if($request->isMethod('get')){
+            $course = Course::all();
+            return view('admin.lesson.add',compact('course'));
+        }elseif ($request->isMethod('post')){
+            $data = $request->all();
+            $rules = [
+                'lesson_name'=>'required|unique|min:2:lesson,lesson_name',
+                'course_id'=>'required|integer',
+                'teacher_name'=>'required',
+                'status'=>'required|boolean',
+                'lesson_desc'=>'required|min:5'
+            ];
+            $msg = [
+                'lesson_name.required'=>'课时名称不能为空',
+                'lesson_name.min'=>'课时名称最少是2个字符',
+                'lesson_name.unique'=>'课时名称已经存在',
+                'course_id.required'=>'所属课程不能为空',
+                'course_id.integer'=>'所属课程数据异常',
+                'teacher_name.required'=>'讲师名称不能为空',
+                'lesson_length.required'=>'课时长度不能为空',
+                'status.boolean'=>'状态数据异常',
+                'lesson_desc.required'=>'课时描述不能为空',
+                'lesson_desc.min'=>'课时描述最少是5个字符'
+            ];
+            $validator = Validator::make($data,$rules,$msg);
+            if($validator->passes()){
+                $res = Lesson::create($data);
+                if($res){
+                    return ['info'=>1];
+                }
+            }else{
+                $error = collect($validator->messages())->implode('0',',');
+                return ['info'=>0,'error'=>$error];
+            }
+        }
+
     }
 }

@@ -30,12 +30,12 @@ class CourseTableSeeder extends Seeder
                 'course_price'=>1235
             ],
             [
-                'curse_name'=>'Lamp环境安装',
+                'course_name'=>'Lamp环境安装',
                 'profession_id'=>2,
                 'course_price'=>1420,
             ],
             [
-                'curse_name'=>'c高级语言',
+                'course_name'=>'c高级语言',
                 'profession_id'=>3,
                 'course_price'=>6800
             ],
