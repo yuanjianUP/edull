@@ -19,4 +19,5 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     Route::get('welcome','IndexController@welcome');
     Route::match(['post','get'],'lesson/index','LessonController@index');
     Route::match(['post','get'],'lesson/add','LessonController@add');
+    Route::post('lesson/uploadimg','LessonController@uploadimg');
 });

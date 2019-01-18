@@ -107,4 +107,8 @@ class LessonController extends Controller
         }
 
     }
+    public function uploadimg(Request $request){
+        $file = $request->file('file');
+        return ['info'=>'/uploads/'.$file->store('image','upload')];
+    }
 }
