@@ -69,11 +69,13 @@ class LessonController extends Controller
             return $info;
         }
     }
+
     public function add(Request $request){
         if($request->isMethod('get')){
             $course = Course::all();
             return view('admin.lesson.add',compact('course'));
         }elseif ($request->isMethod('post')){
+            dump(123);exit;
             $data = $request->all();
             $rules = [
                 'lesson_name'=>'required|unique|min:2:lesson,lesson_name',
@@ -95,6 +97,7 @@ class LessonController extends Controller
                 'lesson_desc.min'=>'课时描述最少是5个字符'
             ];
             $validator = Validator::make($data,$rules,$msg);
+            return $data;
             if($validator->passes()){
                 $res = Lesson::create($data);
                 if($res){
@@ -107,8 +110,49 @@ class LessonController extends Controller
         }
 
     }
+
     public function uploadimg(Request $request){
         $file = $request->file('file');
         return ['info'=>'/uploads/'.$file->store('image','upload')];
+    }
+    public function play(Request $request,Lesson $lesson){
+        return view('admin.lesson.play',compact('lesson'));
+    }
+    public function update(Request $request,Lesson $lesson){
+        if($request->isMethod('get')){
+            $course = Course::all();
+            return view('admin.lesson.update',compact('lesson','course'));
+        }elseif($request->isMethod('post')){
+            $data = $request->all();
+            $rules = [
+                'lesson_name'=>'required|min:2|unique:lesson,lesson_name,'.$lesson->id,//排除自己
+                'course_id'=>'required|integer',
+                'teacher_name'=>'required',
+                'lesson_length'=>'required|integer',
+                'status'=>'required|boolean',
+                'lesson_desc'=>'required|min:5'
+            ];
+            $msg = [
+                'lesson_name.required'=>'课时名称不能为空',
+                'lesson_name.min'=>'课时名称最少是2个字符',
+                'lesson_name.unique'=>'课时名称已经存在',
+                'course_id.required'=>'所属课程不能为空',
+                'course_id.integer'=>'所属课程数据异常',
+                'teacher_name.required'=>'讲师名称不能为空',
+                'lesson_length.required'=>'课时长度不能为空',
+                'status.required'=>'状态不能为空',
+                'status.boolean'=>'状态数据异常',
+                'lesson_desc.required'=>'课时描述不能为空',
+                'lesson_desc.min'=>'课时描述最少是5个字符',
+            ];
+            $validator = Volidator::make($data,$rules,$msg);
+            if($validator->passes()){
+                $lesson->update($data);
+                return ['info'=>1];
+            }else{
+                $error = collect($validator->messages())->implode('0',',');
+                return ['info'=>0,'error'=>$error];
+            }
+        }
     }
 }

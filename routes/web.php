@@ -20,4 +20,6 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     Route::match(['post','get'],'lesson/index','LessonController@index');
     Route::match(['post','get'],'lesson/add','LessonController@add');
     Route::post('lesson/uploadimg','LessonController@uploadimg');
+    Route::get('lesson/play/{lesson}','LessonController@play');
+    Route::match(['post','get'],'lesson/update/{lesson}','LessonController@update');
 });

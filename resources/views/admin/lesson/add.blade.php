@@ -218,11 +218,12 @@ $(function(){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
-			url:'{{url('admin/lesson/add')}}',
+			url:'{{url("admin/lesson/add")}}',
 			type:'post',
 			data:data,
 			dataType:'json',
 			success:function (msg) {
+			    console.log(msg)
 				if(msg.info==1){
 					layer.alert('添加成功',function(){
 					    //dataTable插件重启请求
