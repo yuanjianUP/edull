@@ -29,13 +29,13 @@
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>课时名称：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="lesson_name" name="adminName">
+			<input type="text" class="input-text" value="" placeholder="" id="lesson_name" name="lesson_name">
 		</div>
 	</div>
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3">所属课程：</label>
 		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
-			<select class="select" name="adminRole" size="1">
+			<select class="select" name="course_id" size="1">
 				<option value="0">选择课程</option>
 				@foreach($course as $v)
 				<option value="{{$v->id}}">{{$v->course_name}}</option>
@@ -48,7 +48,7 @@
 		<div class="formControls col-xs-8 col-sm-9">
 			<!--上传图片成功后的预览区域-->
 			<div id="fileList" class="uploader-list"></div>
-			<input type="text" class="input-text" name="cover_img" id="cover_img" />
+			<input type="text" class="input-text" name="lesson_img" id="cover_img" />
 			<div id='a' style="">
 				<div class="b" style="width: 700px">
 					<div class="sr-only" style="width: 0%"></div>
@@ -237,54 +237,54 @@ $(function(){
             }
 		})
     });
-	$("#form-admin-add").validate({
-		rules:{
-			adminName:{
-				required:true,
-				minlength:4,
-				maxlength:16
-			},
-			password:{
-				required:true,
-			},
-			password2:{
-				required:true,
-				equalTo: "#password"
-			},
-			sex:{
-				required:true,
-			},
-			phone:{
-				required:true,
-				isPhone:true,
-			},
-			email:{
-				required:true,
-				email:true,
-			},
-			adminRole:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit({
-				type: 'post',
-				url: "xxxxxxx" ,
-				success: function(data){
-					layer.msg('添加成功!',{icon:1,time:1000});
-				},
-                error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
-				}
-			});
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}
-	});
+	// $("#form-admin-add").validate({
+	// 	rules:{
+	// 		adminName:{
+	// 			required:true,
+	// 			minlength:4,
+	// 			maxlength:16
+	// 		},
+	// 		password:{
+	// 			required:true,
+	// 		},
+	// 		password2:{
+	// 			required:true,
+	// 			equalTo: "#password"
+	// 		},
+	// 		sex:{
+	// 			required:true,
+	// 		},
+	// 		phone:{
+	// 			required:true,
+	// 			isPhone:true,
+	// 		},
+	// 		email:{
+	// 			required:true,
+	// 			email:true,
+	// 		},
+	// 		adminRole:{
+	// 			required:true,
+	// 		},
+	// 	},
+	// 	onkeyup:false,
+	// 	focusCleanup:true,
+	// 	success:"valid",
+	// 	submitHandler:function(form){
+	// 		$(form).ajaxSubmit({
+	// 			type: 'post',
+	// 			url: "xxxxxxx" ,
+	// 			success: function(data){
+	// 				layer.msg('添加成功!',{icon:1,time:1000});
+	// 			},
+    //             error: function(XmlHttpRequest, textStatus, errorThrown){
+	// 				layer.msg('error!',{icon:1,time:1000});
+	// 			}
+	// 		});
+	// 		var index = parent.layer.getFrameIndex(window.name);
+	// 		parent.$('.btn-refresh').click();
+	// 		parent.layer.close(index);
+	// 	}
+	// });
 });
 </script>
 <!--/请在上方写此页面业务相关的脚本-->

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class LessonController extends Controller
@@ -75,10 +76,9 @@ class LessonController extends Controller
             $course = Course::all();
             return view('admin.lesson.add',compact('course'));
         }elseif ($request->isMethod('post')){
-            dump(123);exit;
             $data = $request->all();
             $rules = [
-                'lesson_name'=>'required|unique|min:2:lesson,lesson_name',
+                'lesson_name'=>'required|min:2|unique:lesson,lesson_name',
                 'course_id'=>'required|integer',
                 'teacher_name'=>'required',
                 'status'=>'required|boolean',
@@ -97,7 +97,6 @@ class LessonController extends Controller
                 'lesson_desc.min'=>'课时描述最少是5个字符'
             ];
             $validator = Validator::make($data,$rules,$msg);
-            return $data;
             if($validator->passes()){
                 $res = Lesson::create($data);
                 if($res){
@@ -154,5 +153,34 @@ class LessonController extends Controller
                 return ['info'=>0,'error'=>$error];
             }
         }
+    }
+
+    public function del(Request $request){
+        $id = $request->input('id');
+        $lesson = Lesson::find($id);
+        $img  = $lesson->lesson_img;
+        if($img != ''){
+            $img = str_replace('/uploads/','',$img);
+            Storage::disk('upload')->delete($img);
+        }
+        $res = $lesson->delete();
+        if($res){
+            return ['info'=>1];
+        }else{
+            return ['info'=>0];
+        }
+    }
+
+    public function datadel(Request $request){
+        $ids = $request->input('ids');
+        Lesson::whereIn('id',$ids)->get()->each(function ($item){
+            $img = $item->lesson_img;
+            if($img != ''){
+                $img = str_replace('/uploads/','',$img);
+                Storage::disk('upload')->delete($img);
+            }
+            $item -> delete();
+        });
+        return ['info'=>1];
     }
 }

@@ -6,6 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta name="csrf-token" content="{{csrf_token()}}">
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="{{asset('admins')}}/lib/html5shiv.js"></script>
 	<script type="text/javascript" src="{{asset('admins')}}/lib/respond.min.js"></script>
@@ -125,7 +126,7 @@
                 $(row).find("td:eq(9)").html(str+'<a title="修改" href="javascript:;" onclick="lesson_edit('+data.id+')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="lesson_del(this,'+data.id+')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>');
                 //填充按钮
                 $(row).find("td:eq(6)").html('<input onclick="play('+data.id+')" class="btn btn-success-outline radius" type="button" value="播放">');
-                var imgs = "<img width='120' src='"+data.cover_img+"'/>";
+                var imgs = "<img width='120' src='"+data.lesson_img+"'/>";
                 $(row).find("td:eq(7)").html(imgs);
             }
         });
@@ -229,6 +230,9 @@
     function lesson_del(obj,id){
         layer.confirm('确认要删除吗？',function(index){
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 type: 'POST',
                 url: '{{url("admin/lesson/del")}}',
                 data:{id:id,'_token':'{{csrf_token()}}'},

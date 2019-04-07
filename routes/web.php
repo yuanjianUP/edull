@@ -15,11 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
-    Route::get('index','IndexController@index');
-    Route::get('welcome','IndexController@welcome');
-    Route::match(['post','get'],'lesson/index','LessonController@index');
-    Route::match(['post','get'],'lesson/add','LessonController@add');
-    Route::post('lesson/uploadimg','LessonController@uploadimg');
-    Route::get('lesson/play/{lesson}','LessonController@play');
-    Route::match(['post','get'],'lesson/update/{lesson}','LessonController@update');
+    Route::group(['middleware'=>'login'],function (){
+        Route::get('index','IndexController@index');
+        Route::get('welcome','IndexController@welcome');
+        Route::match(['post','get'],'lesson/index','LessonController@index');
+        Route::match(['post','get'],'lesson/add','LessonController@add');
+        Route::post('lesson/uploadimg','LessonController@uploadimg');
+        Route::get('lesson/play/{lesson}','LessonController@play');
+        Route::match(['post','get'],'lesson/update/{lesson}','LessonController@update');
+        Route::post('lesson/del','LessonController@del');
+        Route::get('logout','ManagerController@logout');
+        Route::get('role/index','RoleController@index');
+        Route::match(['post','get'],'role/update/{role}','RoleController@update');
+    });
+    Route::get('login','ManagerController@login');
+    Route::post('login_check','ManagerController@login_check');
+
 });
