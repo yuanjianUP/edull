@@ -35,7 +35,7 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName">
+				<input type="text" class="input-text" value="" placeholder="" id="roleName" name="role_name">
 			</div>
 		</div>
 		<div class="row cl">
@@ -45,7 +45,11 @@
 					<dl class="permission-list">
 					<dt>
 						<label>
-							<input type="checkbox" value="{{$v->id}}" name="priv[]" id="user-Character-0">
+							<input
+									@if(in_array($v->id,$old_priv_ids))
+											checked="checked"
+									@endif
+									type="checkbox" value="{{$v->id}}" name="priv[]" id="user-Character-0">
 							{{$v->priv_name}}</label>
 					</dt>
 					<dd>
@@ -103,17 +107,17 @@ $(function(){
 		}
 		$.ajax({
 			type:'post',
-			url:'{{url('admin/role/update')}}/{{$role}}',
+			url:'{{url('admin/role/update')}}/{{$role->id}}',
 			data:data,
 			success: function (msg) {
 			    console.log(msg)
 				if(msg.info == 1){
 					layer.alert('修改成功',function () {
 						parent.window.location.href = parent.window.location.href;
-						// layer.close();
+						layer.close();
                     });
 				}else {
-				    layer.msg('修改失败',{icon:5,time:3000})
+				    layer.msg(msg.error,{icon:5,time:3000})
 				}
             }
 		})

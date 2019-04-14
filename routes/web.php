@@ -30,5 +30,13 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     });
     Route::get('login','ManagerController@login');
     Route::post('login_check','ManagerController@login_check');
+    Route::get('test','TestController@index');
 
+});
+Route::group(['prefix'=>'home','namespace'=>'Home'],function (){
+    Route::get('index','IndexController@index');
+    Route::get('course/detail/{course}','CourseController@detail');
+    Route::get('cart/add/{course}','CartController@add');
+    Route::get('cart/index','CartController@index');
+    Route::get('order/add','OrderController@add');
 });
