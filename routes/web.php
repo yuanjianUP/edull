@@ -27,6 +27,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::get('logout','ManagerController@logout');
         Route::get('role/index','RoleController@index');
         Route::match(['post','get'],'role/update/{role}','RoleController@update');
+        Route::get('paper/index','PaperController@index');
+        Route::get('question/index/{paper}','QuestionController@index');
+        Route::match(['post','get'],'question/add/{paper}','QuestionController@add');
     });
     Route::get('login','ManagerController@login');
     Route::post('login_check','ManagerController@login_check');
@@ -39,4 +42,5 @@ Route::group(['prefix'=>'home','namespace'=>'Home'],function (){
     Route::get('cart/add/{course}','CartController@add');
     Route::get('cart/index','CartController@index');
     Route::get('order/add','OrderController@add');
+
 });
